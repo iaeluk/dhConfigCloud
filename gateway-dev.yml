@@ -1,0 +1,21 @@
+server:
+  port: 8080
+spring:  
+  cloud:
+    gateway:
+      routes:
+        - id: movieRoute
+          uri: lb://MOVIE
+          predicates:
+           - Path=/movies/**
+        - id: catalogRoute
+          uri: lb://CATALOG
+          predicates:
+           - Path=catalog/**
+          filters:
+            - AddRequestHeader=user-request-header, custom-user-request-header
+            - AddResponseHeader=user-respons-header, custom-user-response-header
+logging:
+  level:
+    org.springframework.cloud.gateway: DEBUG
+    reactor.netty.http.client: DEBUG
